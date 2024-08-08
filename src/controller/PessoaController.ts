@@ -1,8 +1,6 @@
-import { Request, Response } from "express";
 import { Controller, Delete, Get, Put, Query } from "tsoa";
 import { Body, Post, Res, Route, Tags, TsoaResponse } from "@tsoa/runtime";
 import { BasicResponseDto } from "../model/dto/BasicResponseDto";
-import { ProductRequestDto } from "../model/dto/ProductRequestDto";
 import { PessoaService } from "../service/PessoaService";
 import { PessoaRequestDto } from "../model/dto/PessoaRequestDto";
 

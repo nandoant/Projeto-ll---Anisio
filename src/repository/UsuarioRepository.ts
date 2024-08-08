@@ -50,7 +50,7 @@ export class UsuarioRepository {
     }
 
     async update(usuario:Usuario): Promise<Usuario> {
-        const query = "UPDATE biblioteca.usuario SET nome = ?, email = ?, senha = ² WHERE (id = ?);"
+        const query = "UPDATE biblioteca.usuario SET nome = ?, email = ?, senha = ? WHERE (id = ?);"
 
         try {
             const resultado = await executarComandoSQL(query, [usuario.nome, usuario.email,usuario.senha, usuario.id]);
