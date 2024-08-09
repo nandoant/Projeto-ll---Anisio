@@ -1,80 +1,78 @@
 import { Body, Controller, Delete, Get, Post, Put, Query, Res, Route, Tags, TsoaResponse } from "tsoa";
-import { CategoriaService } from "../service/CategoriaService";
 import { BasicResponseDto } from "../model/dto/BasicResponseDto";
-import { CategoriaResponseDto } from "../model/dto/CategoriaResponseDto";
+import { EmprestimoService } from "../service/EmprestimoService";
+import { EmprestimoRequestDto } from "../model/dto/EmprestimoRequestDto";
 
-
-@Route("categoria")
-@Tags("Categoria")
-export class CategoriaController extends Controller{
-    
-    private categoriaService = new CategoriaService();
+@Route("emprestimo")
+@Tags("Emprestimo")
+export class EmprestimoController extends Controller{
+    private emprestimoService = new EmprestimoService();
 
 
     @Post()
-    async cadastrarCategoria(
-        @Body() dto: CategoriaResponseDto,
+    async cadastrarEmprestimo(
+        @Body() dto: EmprestimoRequestDto,
         @Res() fail: TsoaResponse<400, BasicResponseDto>,
         @Res() success: TsoaResponse<201, BasicResponseDto>
     ): Promise<void> {
         try {
-            const categoria = await this.categoriaService.cadastrarCategoria(dto);
-            return success(201, new BasicResponseDto("Categoria criada com sucesso!", categoria));
+            const emprestimo = await this.emprestimoService.cadastrarEmprestimo(dto);
+            return success(201, new BasicResponseDto("Emprestimo criada com sucesso!", emprestimo));
         } catch (error: any) {
             return fail(400, new BasicResponseDto(error.message, undefined));
         }
     };    
 
     @Put()
-    async atualizarCategoria (
-        @Body() dto: CategoriaResponseDto,
+    async atualizarEmprestimo (
+        @Body() dto: EmprestimoRequestDto,
         @Res() fail: TsoaResponse<400, BasicResponseDto>,
         @Res() success: TsoaResponse<200, BasicResponseDto>
     ):Promise<void> {
         try {
-            const categoria = await this.categoriaService.atualizarCategoria(dto);
-            return success(200, new BasicResponseDto("Categoria atualizado com sucesso!", categoria));
+            const emprestimo = await this.emprestimoService.atualizarEmprestimo(dto);
+            return success(200, new BasicResponseDto("Emprestimo atualizado com sucesso!", emprestimo));
         } catch (error: any) {
             return fail(400, new BasicResponseDto(error.message, undefined));
         }
     };
 
     @Delete()
-    async deletarCategoria (
-        @Body() dto: CategoriaResponseDto,
+    async deletarEmprestimo (
+        @Body() dto: EmprestimoRequestDto,
         @Res() fail: TsoaResponse<400, BasicResponseDto>,
         @Res() success: TsoaResponse<200, BasicResponseDto>
     ):Promise<void> {
         try {
-            const categoria = await this.categoriaService.deletarCategoria(dto);
-            return success(200, new BasicResponseDto("Categoria deletado com sucesso!", categoria));
+            const emprestimo = await this.emprestimoService.deletarEmprestimo(dto);
+            return success(200, new BasicResponseDto("Emprestimo deletado com sucesso!", emprestimo));
         } catch (error: any) {
             return fail(400, new BasicResponseDto(error.message, undefined));
         }
     };
 
     @Get()
-    async filtrarCategoria (
+    async filtrarEmprestimo (
         @Query() id: string,
         @Res() fail: TsoaResponse<400, BasicResponseDto>,
         @Res() success: TsoaResponse<200, BasicResponseDto>
     ){
         try {
-            const categoria = await this.categoriaService.filtrarCategoria(id);
-            return success(200, new BasicResponseDto("Categoria encontrado com sucesso!", categoria));
+            const emprestimo = await this.emprestimoService.filtrarEmprestimo(id);
+            return success(200, new BasicResponseDto("Emprestimo encontrado com sucesso!", emprestimo));
         } catch (error: any) {
             return fail(400, new BasicResponseDto(error.message, undefined));
         }
     };
 
     @Get("all")
-    async listarTodosCategorias (
+    async listarTodosEmprestimos (
         @Res() fail: TsoaResponse<400, BasicResponseDto>,
         @Res() success: TsoaResponse<200, BasicResponseDto>
     ){
         try {
-            const emprestimoss = await this.categoriaService.listarTodasCategorias();
-            return success(200, new BasicResponseDto("Categorias encontrados com sucesso!", emprestimoss));
+            const emprestimos = await this.emprestimoService.listarTodasEmprestimos();
+            return success(200, new BasicResponseDto("Emprestimos encontrados com sucesso!", emprestimos));
         } catch (error: any) {
             return fail(400, new BasicResponseDto(error.message, undefined));
         }

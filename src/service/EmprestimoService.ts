@@ -1,50 +1,50 @@
-import { Categoria } from "../model/Categoria";
-import { CategoriaRepository } from "../repository/CategoriaRepository";
+import { Emprestimo } from "../model/Emprestimo";
+import { EmprestimoRepository } from "../repository/EmprestimoRepository";
 
-export class CategoriaService {
-    private emprestimoRepo = CategoriaRepository.getInstance();
+export class EmprestimoService {
+    private EmprestimoRepo = EmprestimoRepository.getInstance();
 
-    async cadastrarCategoria(CategoriaData: any): Promise<Categoria> {
-        const { nome } = CategoriaData;
+    async cadastrarEmprestimo(emprestimoData: any): Promise<Emprestimo> {
+        const { livroId, usuarioId, dataEmprestimo, dataDevolucao } = emprestimoData;
         
-        const categoria = new Categoria(0, nome);
+        const emprestimo = new Emprestimo(0, livroId, usuarioId, dataEmprestimo, dataDevolucao);
 
-        const novoCategoria =  await this.emprestimoRepo.insert(categoria);
-        console.log("Categoria - Service - Insert ", novoCategoria);
-        return novoCategoria;
+        const novoEmprestimo =  await this.EmprestimoRepo.insert(emprestimo);
+        console.log("Emprestimo - Service - Insert ", novoEmprestimo);
+        return novoEmprestimo;
     }
 
-    async atualizarCategoria(CategoriaData: any): Promise<Categoria> {
-        const { id, nome } = CategoriaData;
+    async atualizarEmprestimo(emprestimoData: any): Promise<Emprestimo> {
+        const { id, livroId, usuarioId, dataEmprestimo, dataDevolucao } = emprestimoData;
 
-        const categoria = new Categoria(id, nome);
+        const emprestimo = new Emprestimo(id, livroId, usuarioId, dataEmprestimo, dataDevolucao);
 
-        await this.emprestimoRepo.update(categoria);
-        console.log("Categoria - Service - Update ", categoria);
-        return categoria;
+        await this.EmprestimoRepo.update(emprestimo);
+        console.log("Emprestimo - Service - Update ", emprestimo);
+        return emprestimo;
     }
 
-    async deletarCategoria(CategoriaData: any): Promise<Categoria> {
-        const { id, nome } = CategoriaData;
+    async deletarEmprestimo(emprestimoData: any): Promise<Emprestimo> {
+        const { id, livroId, usuarioId, dataEmprestimo, dataDevolucao } = emprestimoData;
 
-        const categoria = new Categoria(id, nome);
+        const emprestimo = new Emprestimo(id, livroId, usuarioId, dataEmprestimo, dataDevolucao);
 
-        await this.emprestimoRepo.delete(categoria);
-        console.log("Categoria - Service - Delete ", categoria);
-        return categoria;
+        await this.EmprestimoRepo.delete(emprestimo);
+        console.log("Emprestimo - Service - Delete ", emprestimo);
+        return emprestimo;
     }
 
-    async filtrarCategoria(CategoriaData: any): Promise<Categoria> {
-        const idNumber = parseInt(CategoriaData, 10);
+    async filtrarEmprestimo(id: any): Promise<Emprestimo> {
+        const idNumber = parseInt(id, 10);
 
-        const categoria =  await this.emprestimoRepo.getById(idNumber);
-        console.log("Categoria - Service - Filtrar", categoria);
-        return categoria;
+        const emprestimo =  await this.EmprestimoRepo.getById(idNumber);
+        console.log("Emprestimo - Service - Filtrar", emprestimo);
+        return emprestimo;
     }
 
-    async listarTodasCategorias(): Promise<Categoria[]> {
-        const emprestimos =  await this.emprestimoRepo.getAll();
-        console.log("Categoria - Service - Filtrar Todos", emprestimos);
+    async listarTodasEmprestimos(): Promise<Emprestimo[]> {
+        const emprestimos =  await this.EmprestimoRepo.getAll();
+        console.log("Emprestimo - Service - Filtrar Todos", emprestimos);
         return emprestimos;
     }
 
