@@ -1,4 +1,4 @@
-export class EmprestimoResponseDto {
+export class Categoria {
     id: number;
     nome: string;
 

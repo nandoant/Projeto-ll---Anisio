@@ -67,7 +67,33 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"EmprestimoResponseDto": {
+			"LivroRequestDto": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"titulo": {
+						"type": "string"
+					},
+					"autor": {
+						"type": "string"
+					},
+					"categoriaId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"titulo",
+					"autor",
+					"categoriaId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CategoriaResponseDto": {
 				"properties": {
 					"id": {
 						"type": "number",
@@ -497,9 +523,9 @@
 				"parameters": []
 			}
 		},
-		"/emprestimo": {
+		"/livro": {
 			"post": {
-				"operationId": "CadastrarEmprestimo",
+				"operationId": "CadastrarLivro",
 				"responses": {
 					"201": {
 						"description": "",
@@ -526,7 +552,7 @@
 					}
 				},
 				"tags": [
-					"Emprestimo"
+					"Livro"
 				],
 				"security": [],
 				"parameters": [],
@@ -535,14 +561,14 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/EmprestimoResponseDto"
+								"$ref": "#/components/schemas/LivroRequestDto"
 							}
 						}
 					}
 				}
 			},
 			"put": {
-				"operationId": "AtualizarEmprestimo",
+				"operationId": "AtualizarLivro",
 				"responses": {
 					"200": {
 						"description": "",
@@ -569,7 +595,7 @@
 					}
 				},
 				"tags": [
-					"Emprestimo"
+					"Livro"
 				],
 				"security": [],
 				"parameters": [],
@@ -578,14 +604,14 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/EmprestimoResponseDto"
+								"$ref": "#/components/schemas/LivroRequestDto"
 							}
 						}
 					}
 				}
 			},
 			"delete": {
-				"operationId": "DeletarEmprestimo",
+				"operationId": "DeletarLivro",
 				"responses": {
 					"200": {
 						"description": "",
@@ -612,7 +638,7 @@
 					}
 				},
 				"tags": [
-					"Emprestimo"
+					"Livro"
 				],
 				"security": [],
 				"parameters": [],
@@ -621,14 +647,14 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/EmprestimoResponseDto"
+								"$ref": "#/components/schemas/LivroRequestDto"
 							}
 						}
 					}
 				}
 			},
 			"get": {
-				"operationId": "FiltrarEmprestimo",
+				"operationId": "FiltrarLivro",
 				"responses": {
 					"200": {
 						"description": "",
@@ -652,7 +678,7 @@
 					}
 				},
 				"tags": [
-					"Emprestimo"
+					"Livro"
 				],
 				"security": [],
 				"parameters": [
@@ -667,9 +693,9 @@
 				]
 			}
 		},
-		"/emprestimo/all": {
+		"/livro/all": {
 			"get": {
-				"operationId": "ListarTodosEmprestimos",
+				"operationId": "ListarTodosLivros",
 				"responses": {
 					"200": {
 						"description": "",
@@ -693,7 +719,209 @@
 					}
 				},
 				"tags": [
-					"Emprestimo"
+					"Livro"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/categoria": {
+			"post": {
+				"operationId": "CadastrarCategoria",
+				"responses": {
+					"201": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BasicResponseDto"
+								}
+							}
+						}
+					},
+					"204": {
+						"description": "No content"
+					},
+					"400": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BasicResponseDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Categoria"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CategoriaResponseDto"
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"operationId": "AtualizarCategoria",
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BasicResponseDto"
+								}
+							}
+						}
+					},
+					"204": {
+						"description": "No content"
+					},
+					"400": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BasicResponseDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Categoria"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CategoriaResponseDto"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeletarCategoria",
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BasicResponseDto"
+								}
+							}
+						}
+					},
+					"204": {
+						"description": "No content"
+					},
+					"400": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BasicResponseDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Categoria"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CategoriaResponseDto"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "FiltrarCategoria",
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BasicResponseDto"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BasicResponseDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Categoria"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/categoria/all": {
+			"get": {
+				"operationId": "ListarTodosCategorias",
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BasicResponseDto"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BasicResponseDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Categoria"
 				],
 				"security": [],
 				"parameters": []
