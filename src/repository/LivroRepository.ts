@@ -108,4 +108,27 @@ export class LivroRepository {
         }
     }
 
+
+    async getByCategoriaId(idCategoria: number): Promise<Livro | null> {
+        const query = "SELECT * FROM biblioteca.Livro WHERE categoriaId = ?";
+    
+        try {
+            const resultados = await executarComandoSQL(query, [idCategoria]);
+    
+            if (resultados.length === 0) {
+                return null;
+            }
+    
+            const resultado = resultados[0];
+            const livro = new Livro(resultado.id, resultado.titulo, resultado.autor, resultado.categoriaId);
+            console.log('Livro localizado com sucesso, ID: ', livro.id);
+            return livro;
+    
+        } catch (err: any) {
+            console.error(`Falha ao procurar livro de ID ${idCategoria}, erro: ${err}`);
+            throw err;
+        }
+    }
+    
+
 }
