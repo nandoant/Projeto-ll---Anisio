@@ -67,9 +67,9 @@ export class LivroService {
             throw new Error("Não existe categoria com esse id");
         }
 
-        const existeLivroAssociado = await this.livroRepo.getByCategoriaId(categoriaId);
+        const existeCategAssociada = await this.livroRepo.getByCategoriaId(categoriaId);
 
-        if (existeLivroAssociado) {
+        if (existeCategAssociada) {
             throw new Error("Essa categoria já está associada a outro livro");
         }
     }

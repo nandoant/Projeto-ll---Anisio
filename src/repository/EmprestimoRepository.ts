@@ -109,4 +109,46 @@ export class EmprestimoRepository {
         }
     }
 
+    async getByLivroId(livroId: number): Promise<Emprestimo | null> {
+        const query = "SELECT * FROM biblioteca.Emprestimo WHERE livroId = ?";
+    
+        try {
+            const resultados = await executarComandoSQL(query, [livroId]);
+    
+            if (resultados.length === 0) {
+                return null;
+            }
+    
+            console.log('Emprestimo localizado com sucesso, Livro ID: ', livroId);
+            return new Promise<Emprestimo>((resolve)=>{
+                resolve(resultados);
+            })
+    
+        } catch (err) {
+            console.error(`Erro ao procurar emprestimo por Livro ID ${livroId}, erro: ${err}`);
+            throw err;
+        }
+    }
+
+    async getByUsuarioId(usuarioId: number): Promise<Emprestimo | null> {
+        const query = "SELECT * FROM biblioteca.Emprestimo WHERE usuarioId = ?";
+    
+        try {
+            const resultados = await executarComandoSQL(query, [usuarioId]);
+    
+            if (resultados.length === 0) {
+                return null;
+            }
+    
+            console.log('Emprestimo localizado com sucesso, Livro ID: ', usuarioId);
+            return new Promise<Emprestimo>((resolve)=>{
+                resolve(resultados);
+            })
+    
+        } catch (err) {
+            console.error(`Erro ao procurar emprestimo por Usuario ID ${usuarioId}, erro: ${err}`);
+            throw err;
+        }
+    }
+
 }
