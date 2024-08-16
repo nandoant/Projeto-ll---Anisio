@@ -30,11 +30,11 @@ export class Emprestimo {
         }
 
         if (!dataEmprestimo || !verificaFormatoData(dataEmprestimo)) {
-            error += 'dataEmprestimo inválida. ';
+            error += 'dataEmprestimo inválida, formato: dd/mm/aaaa. ';
         }
 
         if (!dataDevolucao || !verificaFormatoData(dataDevolucao)) {
-            error += 'dataDevolucao inválida. ';
+            error += 'dataDevolucao inválida, formato: dd/mm/aaaa. ';
         }
 
         if (dataEmprestimo && dataDevolucao && new Date(dataDevolucao) < new Date(dataEmprestimo)) {

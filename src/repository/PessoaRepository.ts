@@ -78,15 +78,19 @@ export class PessoaRepository {
         }
     }
 
-    async getById(id: number): Promise<Pessoa> {
+    async getById(id: number): Promise<Pessoa | null> {
         const query = "SELECT * FROM biblioteca.Pessoa where id = ?";
 
         try {
             const resultado = await executarComandoSQL(query, [id]);
+
+            if(resultado.length === 0) {
+                console.log('Pessoa não encontrada, id: ', id);
+                return null;
+            }
+
             console.log('Pessoa localizado com sucesso, ID: ', resultado);
-            return new Promise<Pessoa>((resolve)=> {
-                resolve(resultado);
-            })
+            return new Pessoa(resultado[0].id, resultado[0].nome, resultado[0].email);
         } catch (err:any) {
             console.error(`Falha ao procurar pessoa de ID ${id} gerando o erro: ${err}`);
             throw err;

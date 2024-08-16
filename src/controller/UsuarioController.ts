@@ -58,7 +58,7 @@ export class UsuarioController extends Controller{
         @Res() success: TsoaResponse<200, BasicResponseDto>
     ){
         try {
-            const usuario = await this.usuarioService.filtrarUsuario(id);
+            const usuario = await this.usuarioService.buscarUsuarioPorId(id);
             return success(200, new BasicResponseDto("Usuario encontrado com sucesso!", usuario));
         } catch (error: any) {
             return fail(400, new BasicResponseDto(error.message, undefined));
@@ -71,7 +71,7 @@ export class UsuarioController extends Controller{
         @Res() success: TsoaResponse<200, BasicResponseDto>
     ){
         try {
-            const usuarios = await this.usuarioService.listarTodasUsuarios();
+            const usuarios = await this.usuarioService.listarTodosUsuarios();
             return success(200, new BasicResponseDto("Usuarios encontrados com sucesso!", usuarios));
         } catch (error: any) {
             return fail(400, new BasicResponseDto(error.message, undefined));

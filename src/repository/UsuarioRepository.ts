@@ -20,8 +20,7 @@ export class UsuarioRepository {
         const query = `
         CREATE TABLE IF NOT EXISTS biblioteca.Usuario (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            nome VARCHAR(255) NOT NULL,
-            email VARCHAR(255) NOT NULL,
+            idPessoa INT NOT NULL,
             senha VARCHAR(255) NOT NULL
         )`;
 
@@ -34,10 +33,10 @@ export class UsuarioRepository {
     }
 
     async insert(usuario:Usuario): Promise<Usuario> {
-        const query = "INSERT INTO biblioteca.Usuario (nome, email, senha) VALUES (?, ?, ?)" ;
+        const query = "INSERT INTO biblioteca.Usuario (idPessoa, senha) VALUES (?, ?)" ;
 
         try {
-            const resultado = await executarComandoSQL(query, [usuario.nome, usuario.email, usuario.senha]);
+            const resultado = await executarComandoSQL(query, [usuario.idPessoa, usuario.senha]);
             console.log('Usuario inserido(a) com sucesso, ID: ', resultado.insertId);
             usuario.id = resultado.insertId;
             return new Promise<Usuario>((resolve)=> {
@@ -50,10 +49,10 @@ export class UsuarioRepository {
     }
 
     async update(usuario:Usuario): Promise<Usuario> {
-        const query = "UPDATE biblioteca.usuario SET nome = ?, email = ?, senha = ? WHERE (id = ?);"
+        const query = "UPDATE biblioteca.usuario SET idPessoa = ?, senha = ? WHERE (id = ?);"
 
         try {
-            const resultado = await executarComandoSQL(query, [usuario.nome, usuario.email,usuario.senha, usuario.id]);
+            const resultado = await executarComandoSQL(query, [usuario.idPessoa, usuario.senha, usuario.id]);
             console.log('Usuario atualizado com sucesso, ID: ', resultado);
             return new Promise<Usuario>((resolve)=> {
                 resolve(usuario);
@@ -79,20 +78,27 @@ export class UsuarioRepository {
         }
     }
 
-    async getById(id: number): Promise<Usuario> {
-        const query = "SELECT * FROM biblioteca.Usuario where id = ?";
-
+    async getById(id: number): Promise<Usuario | null> {
+        const query = "SELECT * FROM biblioteca.Usuario WHERE id = ?";
+    
         try {
             const resultado = await executarComandoSQL(query, [id]);
+    
+            if (resultado.length === 0) {
+                console.log('Usuario não encontrado, com ID: ', id);
+                return null;
+            }
+    
             console.log('Usuario localizado com sucesso, ID: ', resultado);
-            return new Promise<Usuario>((resolve)=> {
-                resolve(resultado);
-            })
-        } catch (err:any) {
+    
+            return new Usuario(resultado[0].id, resultado[0].idPessoa, resultado[0].senha);
+    
+        } catch (err: any) {
             console.error(`Falha ao procurar usuario de ID ${id} gerando o erro: ${err}`);
             throw err;
         }
     }
+    
 
     async getAll(): Promise<Usuario[]> {
         const query = "SELECT * FROM biblioteca.Usuario" ;
@@ -104,6 +110,27 @@ export class UsuarioRepository {
             })
         } catch (err:any) {
             console.error(`Falha ao listar os usuarios gerando o erro: ${err}`);
+            throw err;
+        }
+    }
+
+    async getByPessoa(pessoa: number): Promise<Usuario | null> {
+        const query = "SELECT * FROM biblioteca.Usuario where idPessoa = ?";
+
+        try {
+            const resultado = await executarComandoSQL(query, [pessoa]);
+
+            if(resultado.length === 0) {
+                console.log('Usuario não encontrado, com ID: ', pessoa);
+                return null;
+            }
+
+            console.log('Usuario localizado com sucesso, ID: ', resultado);
+            return new Promise<Usuario>((resolve)=> {
+                resolve(resultado);
+            })
+        } catch (err:any) {
+            console.error(`Falha ao procurar usuario de ID ${pessoa} gerando o erro: ${err}`);
             throw err;
         }
     }

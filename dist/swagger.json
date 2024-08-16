@@ -13,11 +13,9 @@
 						"type": "number",
 						"format": "double"
 					},
-					"nome": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
+					"idPessoa": {
+						"type": "number",
+						"format": "double"
 					},
 					"senha": {
 						"type": "string"
@@ -25,8 +23,7 @@
 				},
 				"required": [
 					"id",
-					"nome",
-					"email",
+					"idPessoa",
 					"senha"
 				],
 				"type": "object",

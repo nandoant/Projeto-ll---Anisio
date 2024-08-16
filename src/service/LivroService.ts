@@ -1,10 +1,12 @@
 import { Livro } from "../model/Livro";
 import { CategoriaRepository } from "../repository/CategoriaRepository";
+import { EmprestimoRepository } from "../repository/EmprestimoRepository";
 import { LivroRepository } from "../repository/LivroRepository";
 
 export class LivroService {
     private livroRepo = LivroRepository.getInstance();
     private categoRepo = CategoriaRepository.getInstance();
+    private emprestRepo = EmprestimoRepository.getInstance();
 
     async cadastrarLivro(livroData: any): Promise<Livro> {
         const { titulo, autor, categoriaId } = livroData;
@@ -30,12 +32,27 @@ export class LivroService {
         return livro;
     }
 
+    
     async deletarLivro(livroData: any): Promise<Livro> {
         const { id, titulo, autor, categoriaId} = livroData;
-        //TODO - tenho que adicionar uma procura ao inves do metodo abaixo.
-        await this.validateCategoria(categoriaId);
 
-        const livro = new Livro(id, titulo, autor, categoriaId);
+        const livro = await this.livroRepo.getById(id);
+        if(!livro)
+            throw new Error("Livro não encontrado");
+
+
+        if(livro.autor !== autor )
+            throw new Error("livro_autor: " + livro.autor + " |autor: " + autor);
+        if (livro.categoriaId != parseInt(categoriaId))
+            throw new Error("Informações não condizem com as salvas - categoriaId");
+        if(livro.titulo !== titulo)
+            throw new Error("Informações não condizem com as salvas - titulo");
+
+
+        const emprestimo = await this.emprestRepo.getByLivroId(livro.id);
+        if(emprestimo)
+            throw new Error("Não é possivel deletar esse livro, pois ele esta sendo utilizado por pelo menos um emprestimo. ");
+
         await this.livroRepo.delete(livro);
 
         console.log("Livro - Service - Delete ", livro);
@@ -46,6 +63,8 @@ export class LivroService {
         const idNumber = parseInt(livroData, 10);
 
         const livro =  await this.livroRepo.getById(idNumber);
+        if(!livro)
+            throw new Error("Não existe um livro com esse id")
 
         console.log("Livro - Service - Filtrar", livro);
         return livro;
@@ -65,12 +84,6 @@ export class LivroService {
 
         if (this.isEmptyArray(existeCategoria)) {
             throw new Error("Não existe categoria com esse id");
-        }
-
-        const existeCategAssociada = await this.livroRepo.getByCategoriaId(categoriaId);
-
-        if (existeCategAssociada) {
-            throw new Error("Essa categoria já está associada a outro livro");
         }
     }
 

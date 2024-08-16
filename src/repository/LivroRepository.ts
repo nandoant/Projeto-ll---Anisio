@@ -79,16 +79,29 @@ export class LivroRepository {
         }
     }
 
-    async getById(id: number): Promise<Livro> {
-        const query = "SELECT * FROM biblioteca.Livro where id = ?";
-
+    async getById(id: number): Promise<Livro | null> {
+        const query = "SELECT * FROM biblioteca.Livro WHERE id = ?";
+    
         try {
-            const resultado = await executarComandoSQL(query, [id]);
-            console.log('Livro localizado com sucesso, ID: ', resultado);
-            return new Promise<Livro>((resolve)=> {
-                resolve(resultado);
-            })
-        } catch (err:any) {
+            const resultados = await executarComandoSQL(query, [id]);
+            
+            if (resultados.length === 0) {
+                return null; // Retorna null se nenhum livro for encontrado
+            }
+    
+            const livroData = resultados[0]; // Pega o primeiro (e único) resultado
+            
+            // Cria um novo objeto Livro com os dados do banco
+            const livro = new Livro(
+                livroData.id,
+                livroData.titulo,
+                livroData.autor,
+                livroData.categoriaId
+            );
+    
+            console.log('Livro localizado com sucesso, ID: ', livro.id);
+            return livro;
+        } catch (err: any) {
             console.error(`Falha ao procurar livro de ID ${id} gerando o erro: ${err}`);
             throw err;
         }
