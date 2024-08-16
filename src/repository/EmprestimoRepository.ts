@@ -80,23 +80,29 @@ export class EmprestimoRepository {
         }
     }
 
-    async getById(id: number): Promise<Emprestimo> {
-        const query = "SELECT * FROM biblioteca.Emprestimo where id = ?";
-
+    async getById(id: number): Promise<Emprestimo | null> {
+        const query = "SELECT * FROM biblioteca.Emprestimo WHERE id = ?";
+    
         try {
             const resultado = await executarComandoSQL(query, [id]);
-            console.log('Emprestimo localizado com sucesso, ID: ', resultado);
-            const emprestimo = await new Promise<Emprestimo>((resolve)=> {
-                resolve(resultado);
-            })
-            
-            emprestimo.id = resultado[0].id;
-            emprestimo.livroId = resultado[0].livroId;
-            emprestimo.usuarioId = resultado[0].usuarioId;
-            
+    
+            if (resultado.length === 0) {
+                console.log(`Nenhum empréstimo encontrado com o ID: ${id}`);
+                return null;
+            }
+    
+            const emprestimo = new Emprestimo(
+                resultado[0].id,
+                resultado[0].livroId,
+                resultado[0].usuarioId,
+                this.formatDate(resultado[0].dataEmprestimo),
+                this.formatDate(resultado[0].dataDevolucao)
+            );
+    
+            console.log('Empréstimo localizado com sucesso, ID:', emprestimo.id);
             return emprestimo;
-        } catch (err:any) {
-            console.error(`Falha ao procurar emprestimo de ID ${id} gerando o erro: ${err}`);
+        } catch (err) {
+            console.error(`Erro ao procurar empréstimo de ID ${id}:`, err);
             throw err;
         }
     }
@@ -157,4 +163,10 @@ export class EmprestimoRepository {
         }
     }
 
+    private formatDate(date: Date): string {
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
 }

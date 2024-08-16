@@ -25,7 +25,7 @@ export class EmprestimoService {
         
         const existeEmprestimo = await this.EmprestimoRepo.getById(id);
         console.log("emprestimo: ", existeEmprestimo);
-        if(this.isEmptyArray(existeEmprestimo)){
+        if(!existeEmprestimo){
             throw new Error("Não existe emprestimo com esse id");
         }
 
@@ -64,7 +64,7 @@ export class EmprestimoService {
         const { id, livroId, usuarioId, dataEmprestimo, dataDevolucao } = emprestimoData;
 
         const emprestimo = await this.EmprestimoRepo.getById(id);
-        if(this.isEmptyArray(emprestimo)){
+        if(!emprestimo){
             throw new Error("Não existe emprestimo com esse id");
         }
         if(emprestimo.livroId !== livroId){
@@ -85,7 +85,7 @@ export class EmprestimoService {
         return emprestimo;
     }
 
-    async filtrarEmprestimo(id: any): Promise<Emprestimo> {
+    async filtrarEmprestimo(id: any): Promise<Emprestimo | null> {
         const idNumber = parseInt(id, 10);
 
         const emprestimo =  await this.EmprestimoRepo.getById(idNumber);
