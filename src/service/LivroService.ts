@@ -10,8 +10,7 @@ export class LivroService {
 
     async cadastrarLivro(livroData: any): Promise<Livro> {
         const { titulo, autor, categoriaId } = livroData;
-        await this.validateCategoria(categoriaId);
-        
+        await this.existeCategoria(categoriaId);
         
         const livro = new Livro(0, titulo, autor, categoriaId);
         const novoLivro =  await this.livroRepo.insert(livro);
@@ -22,8 +21,7 @@ export class LivroService {
 
     async atualizarLivro(livroData: any): Promise<Livro> {
         const { id, titulo, autor, categoriaId } = livroData;
-        //TODO - tenho que adicionar erro 404 quando não existe um livro com o id ?.
-        await this.validateCategoria(categoriaId);
+        await this.existeCategoria(categoriaId);
 
         const livro = new Livro(id, titulo, autor, categoriaId);
         await this.livroRepo.update(livro);
@@ -78,9 +76,11 @@ export class LivroService {
     }
     
 
-    private async validateCategoria(categoriaId:number) {
+    private async existeCategoria(categoriaId:number) {
         const existeCategoria = await this.categoRepo.getById(categoriaId);
         console.log(existeCategoria);
+
+        
 
         if (this.isEmptyArray(existeCategoria)) {
             throw new Error("Não existe categoria com esse id");

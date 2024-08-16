@@ -678,6 +678,7 @@ export function RegisterRoutes(app: Router) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     id: {"in":"query","name":"id","required":true,"dataType":"string"},
                     fail: {"in":"res","name":"400","required":true,"ref":"BasicResponseDto"},
+                    notFound: {"in":"res","name":"404","required":true,"ref":"BasicResponseDto"},
                     success: {"in":"res","name":"200","required":true,"ref":"BasicResponseDto"},
             };
 

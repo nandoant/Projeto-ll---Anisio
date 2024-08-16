@@ -22,6 +22,36 @@ export class EmprestimoService {
 
     async atualizarEmprestimo(emprestimoData: any): Promise<Emprestimo> {
         const { id, livroId, usuarioId, dataEmprestimo, dataDevolucao } = emprestimoData;
+        
+        const existeEmprestimo = await this.EmprestimoRepo.getById(id);
+        console.log("emprestimo: ", existeEmprestimo);
+        if(this.isEmptyArray(existeEmprestimo)){
+            throw new Error("Não existe emprestimo com esse id");
+        }
+
+        if(existeEmprestimo.livroId !== livroId){
+            const existeLivro = await this.LivroRepo.getById(livroId);
+            if(!existeLivro){
+                throw new Error("Não existe livro com esse id");
+            }
+
+            const existeLivroAssociado = await this.EmprestimoRepo.getByLivroId(livroId);
+            if (existeLivroAssociado) {
+                throw new Error("Esse livro já está associado a outro emprestimo");
+            }
+        }
+
+        if(existeEmprestimo.usuarioId !== usuarioId){
+            const existeUsuario = await this.UsuarioRepo.getById(usuarioId);
+            if(!existeUsuario){
+                throw new Error("Não existe usuario com esse id");
+            }
+
+            const existeUserAssociado = await this.EmprestimoRepo.getByUsuarioId(usuarioId);
+            if (existeUserAssociado) {
+                throw new Error("Esse Usuario já está associado a outro livro");
+            }
+        }
 
         const emprestimo = new Emprestimo(id, livroId, usuarioId, dataEmprestimo, dataDevolucao);
 
@@ -33,7 +63,22 @@ export class EmprestimoService {
     async deletarEmprestimo(emprestimoData: any): Promise<Emprestimo> {
         const { id, livroId, usuarioId, dataEmprestimo, dataDevolucao } = emprestimoData;
 
-        const emprestimo = new Emprestimo(id, livroId, usuarioId, dataEmprestimo, dataDevolucao);
+        const emprestimo = await this.EmprestimoRepo.getById(id);
+        if(this.isEmptyArray(emprestimo)){
+            throw new Error("Não existe emprestimo com esse id");
+        }
+        if(emprestimo.livroId !== livroId){
+            throw new Error("Informações não condizem com as salvas - livroId");
+        }
+        if(emprestimo.usuarioId !== usuarioId){
+            throw new Error("Informações não condizem com as salvas - usuarioId");
+        }
+        if(emprestimo.dataEmprestimo !== dataEmprestimo){
+            throw new Error("Informações não condizem com as salvas - dataEmprestimo");
+        }
+        if(emprestimo.dataDevolucao !== dataDevolucao){
+            throw new Error("Informações não condizem com as salvas - dataDevolucao");
+        }
 
         await this.EmprestimoRepo.delete(emprestimo);
         console.log("Emprestimo - Service - Delete ", emprestimo);
@@ -62,10 +107,10 @@ export class EmprestimoService {
             throw new Error("Não existe usuario com esse id");
         }
 
-        const existeUserAssociado = await this.EmprestimoRepo.getByUsuarioId(usuarioId);
+        const existeUserAssociado = await this.EmprestimoRepo.getByUsuarioId(usuarioId);    
 
         if (existeUserAssociado) {
-            throw new Error("Esse livro já está associado a outro usuario");
+            throw new Error("Esse Usuario já está associado a outro livro");
         }
 
     }

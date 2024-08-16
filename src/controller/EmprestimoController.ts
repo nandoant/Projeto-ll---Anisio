@@ -55,10 +55,14 @@ export class EmprestimoController extends Controller{
     async filtrarEmprestimo (
         @Query() id: string,
         @Res() fail: TsoaResponse<400, BasicResponseDto>,
+        @Res() notFound: TsoaResponse<404, BasicResponseDto>,
         @Res() success: TsoaResponse<200, BasicResponseDto>
     ){
         try {
             const emprestimo = await this.emprestimoService.filtrarEmprestimo(id);
+            if (!emprestimo) {
+                return notFound(404, new BasicResponseDto("Emprestimo não encontrado", undefined));
+            }
             return success(200, new BasicResponseDto("Emprestimo encontrado com sucesso!", emprestimo));
         } catch (error: any) {
             return fail(400, new BasicResponseDto(error.message, undefined));

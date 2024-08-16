@@ -27,7 +27,7 @@ export class UsuarioService {
         if (!usuarioExistente) throw new Error("Usuário não encontrado");
         
         if (usuarioExistente.idPessoa !== idPessoa) {
-          await this.verificarPessoaPodeSerAssociada(idPessoa);
+          await this.verificarPessoaExiste(idPessoa);
         }
     
         const usuarioAtualizado = new Usuario(id, idPessoa, senha);
@@ -67,12 +67,10 @@ export class UsuarioService {
         const pessoa = await this.pessoaRepo.getById(pessoaId);
         if (!pessoa) throw new Error("Pessoa não encontrada");
     
+        /* Permite apenas um usuário por pessoa
         const usuarioExistente = await this.usuarioRepo.getByPessoa(pessoaId);
         if (usuarioExistente) throw new Error("Pessoa já possui um usuário cadastrado");
-    }
-    
-    private async verificarPessoaPodeSerAssociada(pessoaId: number): Promise<void> {
-        await this.verificarPessoaExiste(pessoaId);
+        */
     }
     
     private async verificarUsuarioPodeDeletar(usuarioId: number): Promise<void> {

@@ -86,9 +86,15 @@ export class EmprestimoRepository {
         try {
             const resultado = await executarComandoSQL(query, [id]);
             console.log('Emprestimo localizado com sucesso, ID: ', resultado);
-            return new Promise<Emprestimo>((resolve)=> {
+            const emprestimo = await new Promise<Emprestimo>((resolve)=> {
                 resolve(resultado);
             })
+            
+            emprestimo.id = resultado[0].id;
+            emprestimo.livroId = resultado[0].livroId;
+            emprestimo.usuarioId = resultado[0].usuarioId;
+            
+            return emprestimo;
         } catch (err:any) {
             console.error(`Falha ao procurar emprestimo de ID ${id} gerando o erro: ${err}`);
             throw err;
