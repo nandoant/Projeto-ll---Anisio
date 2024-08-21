@@ -1,2 +1,2 @@
-# wProjeto 2
+# Projeto 2
 Alunos: Fernando Antonio
